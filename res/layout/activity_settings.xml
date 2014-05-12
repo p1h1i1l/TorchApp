@@ -9,7 +9,7 @@
     <Button
         android:id="@+id/saveButton"
         android:layout_width="174dp"
-        android:layout_height="174dp"
+        android:layout_height="1749dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@drawable/save_button" />
