@@ -12,38 +12,58 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class BlackActivity extends Activity {
 
+	 float curBrightnessValue = 0;
+	 boolean lightsOn = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_black);
 
-		 SharedPreferences sp = PreferenceManager
-		 .getDefaultSharedPreferences(this);
-		 boolean cbValue = sp.getBoolean("CHECKBOX", false);
-		
-		 if (cbValue == true) {
-		 lightsOn();
+		 try {
+		 curBrightnessValue = android.provider.Settings.System.getInt(
+		 getContentResolver(),
+		 android.provider.Settings.System.SCREEN_BRIGHTNESS);
+		 } catch (SettingNotFoundException e) {
+		 // TODO Auto-generated catch block
+		 e.printStackTrace();
 		 }
+		
+		SharedPreferences sp = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean cbValue = sp.getBoolean("CHECKBOX", false);
+
+		if (cbValue == true) {
+			lightsOn();
+		}
 
 		Button onOffButton = (Button) findViewById(R.id.on_off_button);
 		onOffButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				lightsOn();
+				if(lightsOn == true)
+				{
+					lightsOff();
+				}
+				else if(lightsOn == false)
+				{
+					lightsOn();
+				}
 			}
 		});
 	}
-	
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.settingButton:
-			Intent intent = new Intent(BlackActivity.this, SettingsActivity.class);
+			Intent intent = new Intent(BlackActivity.this,
+					SettingsActivity.class);
 			startActivity(intent);
 			break;
 		}
@@ -61,21 +81,22 @@ public class BlackActivity extends Activity {
 	}
 
 	private void lightsOn() {
-		float curBrightnessValue = 0;
-		try {
-			curBrightnessValue = android.provider.Settings.System.getInt(
-					getContentResolver(),
-					android.provider.Settings.System.SCREEN_BRIGHTNESS);
-		} catch (SettingNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		LinearLayout someView = (LinearLayout) findViewById(R.id.BlackActivity);
+		someView.setBackgroundColor(getResources().getColor(
+				android.R.color.white));
 
-		Intent intent = new Intent(BlackActivity.this, WhiteActivity.class);
-		startActivity(intent);
-		overridePendingTransition(R.anim.appear, R.anim.appear);
-		// finish();
+		lightsOn = true;
+		
+		setBrightness(255);
+	}
+	
+	private void lightsOff() {
+		LinearLayout someView = (LinearLayout) findViewById(R.id.BlackActivity);
+		someView.setBackgroundColor(getResources().getColor(
+				android.R.color.black));
 
+		lightsOn = false;
+		
 		setBrightness(curBrightnessValue);
 	}
 
@@ -85,27 +106,31 @@ public class BlackActivity extends Activity {
 		getWindow().setAttributes(layoutParams);
 	}
 
-	public void setBrightnessNEW(float brightness) {
-		try {
-			int brightnessMode = android.provider.Settings.System.getInt(
-					getContentResolver(),
-					android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE);
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		setBrightness(curBrightnessValue);
+	}
 
-			if (brightnessMode == android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
-				android.provider.Settings.System
-						.putInt(getContentResolver(),
-								android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE,
-								android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-			}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		SharedPreferences sp = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean cbValue = sp.getBoolean("CHECKBOX", false);
 
-			WindowManager.LayoutParams layoutParams = getWindow()
-					.getAttributes();
-			layoutParams.screenBrightness = brightness;
-			getWindow().setAttributes(layoutParams);
-
-		} catch (Exception e) {
-			// do something useful
+		if (cbValue == true) {
+			lightsOn();
+		}
+		else
+		{
+			lightsOff();
 		}
 	}
+	
+	
 
 }
