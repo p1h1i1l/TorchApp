@@ -27,26 +27,6 @@ public class WhiteActivity extends Activity {
 			}
 		});
 	}
-	
-	@Override
-	protected void onRestart() {
-		// TODO Auto-generated method stub
-		super.onRestart();
-		
-		 SharedPreferences sp = PreferenceManager
-				 .getDefaultSharedPreferences(this);
-				 boolean cbValue = sp.getBoolean("CHECKBOX", false);
-				
-				 if (cbValue != true) {
-				 finish();
-				 }
-		
-		
-	}
-
-
-
-
 
 	private void setBrightness(float brightness) {
 		WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
