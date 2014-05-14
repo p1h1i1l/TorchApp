@@ -1,7 +1,9 @@
 package com.p1h1i1l.torchapp;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -26,6 +28,26 @@ public class WhiteActivity extends Activity {
 		});
 	}
 	
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		
+		 SharedPreferences sp = PreferenceManager
+				 .getDefaultSharedPreferences(this);
+				 boolean cbValue = sp.getBoolean("CHECKBOX", false);
+				
+				 if (cbValue != true) {
+				 finish();
+				 }
+		
+		
+	}
+
+
+
+
+
 	private void setBrightness(float brightness) {
 		WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
 		layoutParams.screenBrightness = brightness / 255;

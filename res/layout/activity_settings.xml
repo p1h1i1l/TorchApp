@@ -21,7 +21,7 @@
         android:layout_above="@+id/saveButton"
         android:layout_alignRight="@+id/saveButton"
         android:layout_marginBottom="51dp"
-        android:text="Start with torch on"
+        android:text="Start/Resume with torch on"
         android:textColor="@color/white" />
 
 </RelativeLayout>
