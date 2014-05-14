@@ -106,4 +106,31 @@ public class BlackActivity extends Activity {
 		getWindow().setAttributes(layoutParams);
 	}
 
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		setBrightness(curBrightnessValue);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		SharedPreferences sp = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean cbValue = sp.getBoolean("CHECKBOX", false);
+
+		if (cbValue == true) {
+			lightsOn();
+		}
+		else
+		{
+			lightsOff();
+		}
+	}
+	
+	
+
 }

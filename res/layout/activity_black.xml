@@ -11,6 +11,6 @@
         android:id="@+id/on_off_button"
         android:layout_width="174dp"
         android:layout_height="174dp"
-        android:background="@drawable/button_white" />
+        android:background="@drawable/button_onoff" />
 
 </LinearLayout>
